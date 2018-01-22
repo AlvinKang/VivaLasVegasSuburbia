@@ -5,6 +5,7 @@ html, body, #main { height: 100%; margin: 0; padding: 0; }
 	height: 100vh;
 }
 
-.zero-padding {
-	padding: 0px;
+.zero-padding-sides {
+	padding-right: 0;
+	padding-left: 0;
 }

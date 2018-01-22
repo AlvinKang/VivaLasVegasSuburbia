@@ -4,7 +4,8 @@ var markers = [];
 
 function initMap() {
   // Map styling
-  var styles = [{
+  var styles = [
+  	{
       "elementType": "geometry",
       "stylers": [{
         "color": "#1d2c4d"
@@ -190,7 +191,8 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 13,
     center: mapCenter,
-    styles: styles
+    styles: styles,
+    scrollwheel: false
   });
 
   // Filler locations (for starters); place ID commented at the end of each location

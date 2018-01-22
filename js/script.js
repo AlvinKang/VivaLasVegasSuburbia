@@ -192,7 +192,8 @@ function initMap() {
     zoom: 13,
     center: mapCenter,
     styles: styles,
-    scrollwheel: false
+    scrollwheel: false,
+    mapTypeControl: false
   });
 
   // Filler locations (for starters); place ID commented at the end of each location

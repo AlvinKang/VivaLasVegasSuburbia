@@ -9,3 +9,7 @@ html, body, #main { height: 100%; margin: 0; padding: 0; }
 	padding-right: 0;
 	padding-left: 0;
 }
+
+.text-offwhite {
+	color: #EFEDEB;
+}

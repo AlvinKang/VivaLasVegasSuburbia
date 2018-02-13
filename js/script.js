@@ -1,6 +1,32 @@
 // Global variables
 var map;
 var markers = [];
+var activeMarker;
+
+// Hard-coded locations for now, but dynamically present them through Google places API later
+var locations = [
+  { title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } }, // ChIJD7km0lbHyIARxWA29WeiUVU
+  { title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } }, // ChIJtYxg2r_AyIARx2k0A8204nc
+  { title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } }, // ChIJTSVGfzDAyIARQlUdDlgAOcA
+  { title: "Courtyard by Marriott Las Vegas Summerlin", location: { lat: 36.1927815, lng: -115.2427308 } }, // ChIJOdTzvDbAyIARq46IOHOw8V8
+  { title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } }, // ChIJCcO8bCvHyIARgbq2HoGdsHI
+];
+
+var locationsParks = [
+  { title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } }
+];
+
+var locationsTheaters = [
+	{ title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } }
+];
+
+var locationsRestaurants = [
+	{ title: "Courtyard by Marriott Las Vegas Summerlin", location: { lat: 36.1927815, lng: -115.2427308 } }
+];
+
+var locationsGolfCourses = [
+	{ title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } }
+];
 
 function initMap() {
   // Map styling
@@ -196,15 +222,6 @@ function initMap() {
     mapTypeControl: false
   });
 
-  // Filler locations (for starters); place ID commented at the end of each location
-  var locations = [
-    { title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } }, // ChIJD7km0lbHyIARxWA29WeiUVU
-    { title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } }, // ChIJtYxg2r_AyIARx2k0A8204nc
-    { title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } }, // ChIJTSVGfzDAyIARQlUdDlgAOcA
-    { title: "Courtyard by Marriott Las Vegas Summerlin", location: { lat: 36.1927815, lng: -115.2427308 } }, // ChIJOdTzvDbAyIARq46IOHOw8V8
-    { title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } }, // ChIJCcO8bCvHyIARgbq2HoGdsHI
-  ];
-
   var largeInfowindow = new google.maps.InfoWindow();
   var bounds = new google.maps.LatLngBounds();
 
@@ -225,9 +242,10 @@ function initMap() {
     // Push marker to array
     markers.push(marker);
 
-    // When user clicks on marker, show info window
+    // When user clicks on marker, show info window, animate
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
+      markerToggleBounce(this);
     });
 
     // Extend map boundaries to fit marker
@@ -254,3 +272,36 @@ function populateInfoWindow(marker, infowindow) {
     });
   }
 }
+
+function markerToggleBounce(marker) {
+	// Turn off the other marker that is already active
+	if (activeMarker && marker !== activeMarker) {
+		activeMarker.setAnimation(null);
+	}
+
+	// If there is animation already, turn it off
+	if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+		activeMarker = null;
+	} else { 	// If no animation, animate and assign to active
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		activeMarker = marker;
+	}
+}
+
+var ViewModel = function() {
+	var self = this;
+	this.locationsList = ko.observableArray([]);
+	locations.forEach(function(location) {
+		self.locationsList.push( location.title );
+	});
+
+	this.locationTypes = ko.observableArray([
+		"Parks",
+		"Movie Theaters",
+		"Restaurants",
+		"Golf Courses"
+		]);
+}
+
+ko.applyBindings( new ViewModel() );

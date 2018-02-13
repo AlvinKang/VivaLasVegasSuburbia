@@ -245,7 +245,7 @@ function initMap() {
     // When user clicks on marker, show info window, animate
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
-      markerToggleBounce(this);
+      animateMarker(this);
     });
 
     // Extend map boundaries to fit marker
@@ -266,24 +266,24 @@ function populateInfoWindow(marker, infowindow) {
     // Open the infowindow at the marker
     infowindow.open(map, marker);
 
-    // When infowindow is closed, clear marker property
+    // When infowindow is closed, clear marker property, stop bouncing animation
     infowindow.addListener('closeclick', function() {
-      infowindow.setMarker = null;
+      infowindow.marker = null;
+      marker.setAnimation(null);
+      activeMarker = null;
     });
   }
 }
 
-function markerToggleBounce(marker) {
+/* NOTE: ONLY TURNS ON CURRENT MARKER, TURN OFF IS HANDLED BY CLOSECLICK OF INFOWINDOW */
+function animateMarker(marker) {
 	// Turn off the other marker that is already active
 	if (activeMarker && marker !== activeMarker) {
 		activeMarker.setAnimation(null);
 	}
 
-	// If there is animation already, turn it off
-	if (marker.getAnimation() !== null) {
-		marker.setAnimation(null);
-		activeMarker = null;
-	} else { 	// If no animation, animate and assign to active
+	// If no animation, animate and assign to active
+	if (marker.getAnimation() === null) {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		activeMarker = marker;
 	}

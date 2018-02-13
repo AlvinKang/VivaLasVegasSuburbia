@@ -12,26 +12,43 @@
 	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One|Quicksand:500" rel="stylesheet">
 </head>
 <body>
-	<div class="container-fluid zero-padding-sides">
-		<div class="row no-gutters text-offwhite">
-			<!-- Side Bar -->
-			<div class="col-3 text-center bg-dark">
+	<div id="content">
+		<!-- Row contains 2 columns: 1. sidebar and 2. map -->
+		<div class="row text-offwhite no-gutters">
+			<!-- 1. Side Bar -->
+			<div class="col-3 bg-dark">
 				<!-- Title row -->
-				<div class="row no-gutters border-bottom">
-					<h1>Viva Las Vegas Suburbia</h1>
+				<div class="row border-bottom">
+					<div class="col">
+						<h1 class="text-center">Viva Las Vegas Suburbia</h1>
+					</div>
 				</div>
-				<!-- Filter drop down row -->
-				<div class="row no-gutters border-bottom">
-					<h1>Drop down area</h1>
+				<!-- Filter dropdown row -->
+				<div class="row border-bottom">
+					<div class="col">
+						<h1 class="text-center">Drop down area</h1>
+						<form>
+							<div class="form-group px-5">
+								<select class="form-control" data-bind="foreach: locationTypes">
+									<option data-bind="text: $data"></option>
+								</select>
+							</div>
+						</form>
+					</div>
 				</div>
 				<!-- List View of Parks, Movie Theaters, Restaurants, Golf Courses, Libraries row -->
-				<div class="row no-gutters border-bottom">
-					<h1>List area</h1>
+				<div class="row border-bottom">
+					<div class="col">
+						<h1 class="text-center">List area</h1>
+						<ul id="locations-list" data-bind="foreach: locationsList">
+							<li><a href="#" data-bind="text: $data"></a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
-			<!-- Map -->
+			<!-- 2. Map -->
 			<div class="col-9">
-				<div id="map"></div>
+				<div id="map" class="text-primary"></div>
 			</div>
 		</div>
 	</div>

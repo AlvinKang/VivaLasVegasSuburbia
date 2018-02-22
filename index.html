@@ -29,8 +29,7 @@
 						<h1 class="text-center">Drop down area</h1>
 						<form>
 							<div class="form-group px-5">
-								<select class="form-control" data-bind="foreach: locationTypes">
-									<option data-bind="text: $data"></option>
+								<select class="form-control" data-bind="options: locationsInfo, value: currentLocations, optionsText: 'locationsType'">
 								</select>
 							</div>
 						</form>
@@ -40,8 +39,8 @@
 				<div class="row border-bottom">
 					<div class="col">
 						<h1 class="text-center">List area</h1>
-						<ul id="locations-list" data-bind="foreach: locationsList">
-							<li><a href="#" data-bind="text: $data"></a></li>
+						<ul id="locations-list" data-bind="foreach: currentLocations().locationsList">
+							<li><a href="#" data-bind="text: title"></a></li>
 						</ul>
 					</div>
 				</div>

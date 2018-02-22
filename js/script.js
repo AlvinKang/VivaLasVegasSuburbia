@@ -16,7 +16,7 @@ var locationsParks = [
   { title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } }
 ];
 
-var locationsTheaters = [
+var locationsMovieTheaters = [
 	{ title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } }
 ];
 
@@ -289,19 +289,22 @@ function animateMarker(marker) {
 	}
 }
 
+// ViewModel is also referred to as $root
 var ViewModel = function() {
 	var self = this;
-	this.locationsList = ko.observableArray([]);
-	locations.forEach(function(location) {
-		self.locationsList.push( location.title );
-	});
 
-	this.locationTypes = ko.observableArray([
-		"Parks",
-		"Movie Theaters",
-		"Restaurants",
-		"Golf Courses"
-		]);
+	// Non-editable array of locations information
+	self.locationsInfo = [
+		{ locationsType: "All Locations", locationsList: locations },
+		{ locationsType: "Parks", locationsList: locationsParks },
+		{ locationsType: "Movie Theaters", locationsList: locationsMovieTheaters },
+		{ locationsType: "Restaurants", locationsList: locationsRestaurants },
+		{ locationsType: "Golf Courses", locationsList: locationsGolfCourses }
+	];
+
+	// Local variable to store selected option from dropdown
+	self.currentLocations = ko.observable();
+
 }
 
 ko.applyBindings( new ViewModel() );

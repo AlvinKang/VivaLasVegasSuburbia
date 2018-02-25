@@ -2,6 +2,7 @@
 var map;
 var markers = [];
 var activeMarker;
+var infowindow;
 
 // Hard-coded locations for now, but dynamically present them through Google places API later
 var locations = [
@@ -223,6 +224,7 @@ function initMap() {
   });
 
   var largeInfowindow = new google.maps.InfoWindow();
+  infowindow = largeInfowindow;
   var bounds = new google.maps.LatLngBounds();
 
   // Loop through locations array and push markers into markers array
@@ -236,7 +238,6 @@ function initMap() {
       title: title,
       position: position,
       animation: google.maps.Animation.DROP,
-      id: i
     });
 
     // Push marker to array
@@ -304,6 +305,17 @@ var ViewModel = function() {
 
 	// Local variable to store selected option from dropdown
 	self.currentLocations = ko.observable();
+
+	// When a list item is clicked, animate the marker and show clicked location's infowindow
+	self.triggerLocationInfo = function(place) {
+		// Locate marker by title of location
+		var matchedMarker = markers.find(function(marker) {
+			return marker.title === place.title;
+		});
+
+		animateMarker(matchedMarker);
+		populateInfoWindow(matchedMarker, infowindow);
+	}
 
 }
 

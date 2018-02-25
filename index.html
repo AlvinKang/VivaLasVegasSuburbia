@@ -40,7 +40,7 @@
 					<div class="col">
 						<h1 class="text-center">List area</h1>
 						<ul id="locations-list" data-bind="foreach: currentLocations().locationsList">
-							<li><a href="#" data-bind="text: title"></a></li>
+							<li><a href="#" data-bind="text: title, click: $root.triggerLocationInfo"></a></li>
 						</ul>
 					</div>
 				</div>

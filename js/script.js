@@ -1,32 +1,36 @@
 // Global variables
 var map;
-var markers = [];
 var activeMarker;
 var infowindow;
+var markersCategorized = {};
+var allMarkers = [];
 
 // Hard-coded locations for now, but dynamically present them through Google places API later
-var locations = [
-  { title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } }, // ChIJD7km0lbHyIARxWA29WeiUVU
-  { title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } }, // ChIJtYxg2r_AyIARx2k0A8204nc
-  { title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } }, // ChIJTSVGfzDAyIARQlUdDlgAOcA
-  { title: "Courtyard by Marriott Las Vegas Summerlin", location: { lat: 36.1927815, lng: -115.2427308 } }, // ChIJOdTzvDbAyIARq46IOHOw8V8
-  { title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } }, // ChIJCcO8bCvHyIARgbq2HoGdsHI
-];
+// Categories: restaurants, parks, movie theaters, libraries
+var places = [
+	{ category: "Restaurants", title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } },
+	{ category: "Restaurants", title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } },
+	{ category: "Restaurants", title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } },
+	{ category: "Restaurants", title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } },
+	{ category: "Restaurants", title: "Crave American Kitchen & Sushi Bar", location: { lat: 36.151, lng: -115.332771 } },
 
-var locationsParks = [
-  { title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } }
-];
+	{ category: "Parks", title: "Mesa Park", location: { lat: 36.0898885, lng: -115.327354 } },
+	{ category: "Parks", title: "Desert Breeze Park", location: { lat: 36.1247021, lng: -115.2743979 } },
+	{ category: "Parks", title: "Angel Park", location: { lat: 36.1705481, lng: -115.2794986 } },
+	{ category: "Parks", title: "Old Spanish Trail Park", location: { lat: 36.1394668, lng: -115.2685708 } },
+	{ category: "Parks", title: "Summerlin Centre Community Park", location: { lat: 36.1514459, lng: -115.3228885 } },
 
-var locationsMovieTheaters = [
-	{ title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } }
-];
+	{ category: "Movie Theaters", title: "AMC Rainbow Promenade 10", location: { lat: 36.2026616, lng: -115.2436227 } },
+	{ category: "Movie Theaters", title: "Regal Cinemas Red Rock 16 & IMAX", location: { lat: 36.154651, lng: -115.334887 } },
+	{ category: "Movie Theaters", title: "Cinemark Century 16 Movie Theater", location: { lat: 36.1691498, lng: -115.2918826 } },
+	{ category: "Movie Theaters", title: "Regal Cinemas Village Square 18", location: { lat: 36.147239, lng: -115.300483 } },
+	{ category: "Movie Theaters", title: "Brenden Theater", location: { lat: 36.1141321, lng: -115.1960775 } },
 
-var locationsRestaurants = [
-	{ title: "Courtyard by Marriott Las Vegas Summerlin", location: { lat: 36.1927815, lng: -115.2427308 } }
-];
-
-var locationsGolfCourses = [
-	{ title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } }
+	{ category: "Libraries", title: "Sahara West Library", location: { lat: 36.1450039, lng: -115.3054274 } },
+	{ category: "Libraries", title: "Spring Valley Library", location: { lat: 36.111408, lng: -115.224237 } },
+	{ category: "Libraries", title: "West Charleston Public Library", location: { lat: 36.1582708, lng: -115.2311566 } },
+	{ category: "Libraries", title: "Summerlin Library", location: { lat: 36.191391, lng: -115.301739 } },
+	{ category: "Libraries", title: "CSN Library", location: { lat: 36.1554035, lng: -115.2310466 } }
 ];
 
 function initMap() {
@@ -227,31 +231,35 @@ function initMap() {
   infowindow = largeInfowindow;
   var bounds = new google.maps.LatLngBounds();
 
-  // Loop through locations array and push markers into markers array
-  for (var i = 0; i < locations.length; i++) {
-    var position = locations[i].location;
-    var title = locations[i].title;
+  // Loop through all the places and make markers for each place
+  for (var i = 0; i < places.length; i++) {
+  	var place = places[i];
+  	var marker = new google.maps.Marker({
+  		map: map,
+  		title: place.title,
+  		position: place.location,
+  		animation: google.maps.Animation.DROP
+  	});
 
-    // Create a marker for each location
-    var marker = new google.maps.Marker({
-      map: map,
-      title: title,
-      position: position,
-      animation: google.maps.Animation.DROP,
-    });
+  	allMarkers.push(marker);
 
-    // Push marker to array
-    markers.push(marker);
+  	// Add marker to hashmap <category: [markers]>
+  	// If the category doesn't exist, add new key-value pair
+  	if (!(place.category in markersCategorized)) {
+  		markersCategorized[place.category] = [];
+  	}
+		markersCategorized[place.category].push(marker);
 
-    // When user clicks on marker, show info window, animate
-    marker.addListener('click', function() {
-      populateInfoWindow(this, largeInfowindow);
-      animateMarker(this);
-    });
+  	// Add click events to marker
+  	marker.addListener('click', function() {
+  		populateInfoWindow(this, largeInfowindow);
+  		animateMarker(this);
+  	});
 
-    // Extend map boundaries to fit marker
-    bounds.extend(markers[i].position);
+  	// Extend map boundariers to fit marker
+  	bounds.extend(marker.position);
   }
+
   // Reposition map to capture all markers
   map.fitBounds(bounds);
 }
@@ -290,33 +298,76 @@ function animateMarker(marker) {
 	}
 }
 
+// Hide markers
+function hideAllMarkers() {
+	for (var category in markersCategorized) {
+		for (var i = 0; i < markersCategorized[category].length; i++) {
+			var marker = markersCategorized[category][i];
+			marker.setMap(null);
+		}
+	}
+}
+
+// Show all markers
+function showAllMarkers() {
+	for (var category in markersCategorized) {
+		showCategoryMarkers(category);
+	}
+}
+
+// Show only markers of given category
+function showCategoryMarkers(category) {
+	for (var i = 0; i < markersCategorized[category].length; i++) {
+		var marker = markersCategorized[category][i];
+		marker.setMap(map);
+	}
+}
+
+
 // ViewModel is also referred to as $root
 var ViewModel = function() {
+	initMap();
 	var self = this;
 
-	// Non-editable array of locations information
-	self.locationsInfo = [
-		{ locationsType: "All Locations", locationsList: locations },
-		{ locationsType: "Parks", locationsList: locationsParks },
-		{ locationsType: "Movie Theaters", locationsList: locationsMovieTheaters },
-		{ locationsType: "Restaurants", locationsList: locationsRestaurants },
-		{ locationsType: "Golf Courses", locationsList: locationsGolfCourses }
-	];
+	// Holds locations markers organized by category
+	self.locationsCategorized = ko.observableArray();
+	// Add category that contains all markers
+	self.locationsCategorized().push({
+		locationsType: "All Locations",
+		markers: allMarkers
+	});
+
+	// Create new category entry for each category of markers
+	for (var category in markersCategorized) {
+		var categoryEntry = {
+			locationsType: category,
+			markers: markersCategorized[category]
+		};
+		self.locationsCategorized().push(categoryEntry);
+	}
 
 	// Local variable to store selected option from dropdown
 	self.currentLocations = ko.observable();
 
+	// When user interacts with dropdown, display the markers for the corresponding location type
+	self.currentLocations.subscribe(function(currentLocations) {
+		if (currentLocations.locationsType === "All Locations") {
+			showAllMarkers();
+		} else {
+			hideAllMarkers();
+			showCategoryMarkers(currentLocations.locationsType);
+		}
+	});
+
 	// When a list item is clicked, animate the marker and show clicked location's infowindow
 	self.triggerLocationInfo = function(place) {
 		// Locate marker by title of location
-		var matchedMarker = markers.find(function(marker) {
-			return marker.title === place.title;
+		var matchedMarker = self.currentLocations().markers.find(function(marker) {
+			return (marker.title === place.title);
 		});
-
 		animateMarker(matchedMarker);
 		populateInfoWindow(matchedMarker, infowindow);
 	}
-
 }
 
 ko.applyBindings( new ViewModel() );

@@ -8,7 +8,7 @@ var allMarkers = [];
 // Hard-coded locations for now, but dynamically present them through Google places API later
 // Categories: restaurants, parks, movie theaters, libraries
 var places = [
-	{ category: "Restaurants", title: "EATT Gourmet Bistro", location: { lat: 36.1432982, lng: -115.2621864 } },
+	{ category: "Restaurants", title: "BRIO Tuscan Grille", location: { lat: 36.1670208, lng: -115.2877114 } },
 	{ category: "Restaurants", title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } },
 	{ category: "Restaurants", title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } },
 	{ category: "Restaurants", title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } },
@@ -17,8 +17,7 @@ var places = [
 	{ category: "Parks", title: "Mesa Park", location: { lat: 36.0898885, lng: -115.327354 } },
 	{ category: "Parks", title: "Desert Breeze Park", location: { lat: 36.1247021, lng: -115.2743979 } },
 	{ category: "Parks", title: "Angel Park", location: { lat: 36.1705481, lng: -115.2794986 } },
-	{ category: "Parks", title: "Old Spanish Trail Park", location: { lat: 36.1394668, lng: -115.2685708 } },
-	{ category: "Parks", title: "Summerlin Centre Community Park", location: { lat: 36.1514459, lng: -115.3228885 } },
+	{ category: "Parks", title: "Lorenzi Park", location: { lat: 36.1794844, lng: -115.1873993 } },
 
 	{ category: "Movie Theaters", title: "AMC Rainbow Promenade 10", location: { lat: 36.2026616, lng: -115.2436227 } },
 	{ category: "Movie Theaters", title: "Regal Cinemas Red Rock 16 & IMAX", location: { lat: 36.154651, lng: -115.334887 } },
@@ -29,8 +28,7 @@ var places = [
 	{ category: "Libraries", title: "Sahara West Library", location: { lat: 36.1450039, lng: -115.3054274 } },
 	{ category: "Libraries", title: "Spring Valley Library", location: { lat: 36.111408, lng: -115.224237 } },
 	{ category: "Libraries", title: "West Charleston Public Library", location: { lat: 36.1582708, lng: -115.2311566 } },
-	{ category: "Libraries", title: "Summerlin Library", location: { lat: 36.191391, lng: -115.301739 } },
-	{ category: "Libraries", title: "CSN Library", location: { lat: 36.1554035, lng: -115.2310466 } }
+	{ category: "Libraries", title: "Summerlin Library", location: { lat: 36.191391, lng: -115.301739 } }
 ];
 
 function initMap() {
@@ -269,8 +267,49 @@ function populateInfoWindow(marker, infowindow) {
   // As long as there's no infowindow already there, populate it
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
-    // Name of location for now; implement other information using FourSquare API in the future
-    infowindow.setContent('<div>' + marker.title + '<div>');
+
+    var windowContent = "<h6>" + marker.title + "</h6>";
+
+    // Foursquare API AJAX
+    const CLIENT_ID = "RXL2ZGNDMGNV4RANFA5USPSLC040X0ZHDL2YZXKFFEHCKCGT";
+    const CLIENT_SECRET = "KJWNND1CVUF0GFDTANR1KSLEQRRFLH034GTRJSM1J1PXT5R3";
+    const API_VERSION = "20180101";
+    // 1. Perform search for that venue using marker's title and location
+    var searchUrl = "https://api.foursquare.com/v2/venues/search";
+    var latlng = '' + marker.getPosition().lat() + ',' + marker.getPosition().lng();
+    searchUrl += '?' + $.param({
+      'client_id': CLIENT_ID,
+      'client_secret': CLIENT_SECRET,
+      'v': API_VERSION,
+      'll': latlng,
+      'query': marker.title,
+      'radius': "5000"
+    });
+
+    $.getJSON(searchUrl, function(result) {
+    	// 2. Retrieve place ID and perform another venue details AJAX request
+      var venue = result["response"]["venues"][0];
+      var venueID = venue["id"];
+      var detailsUrl = "https://api.foursquare.com/v2/venues/";
+      detailsUrl += venueID + '?' + $.param({
+      	'client_id': CLIENT_ID,
+      	'client_secret': CLIENT_SECRET,
+      	'v': API_VERSION
+      });
+      $.getJSON(detailsUrl, function(data) {
+      	var venue = data["response"]["venue"];
+      	var venueAddress = "Address: <br>" + venue["location"]["formattedAddress"][0] + "<br>" + venue["location"]["formattedAddress"][1];
+      	windowContent += "<br>" + venueAddress;
+      	setWindowContent(infowindow, windowContent);
+      }).fail(function() {
+      	// If the AJAX request fails, change window information
+      	windowContent = "Cannot retrieve information about this venue.";
+      });
+
+    }).fail(function() {
+      // AJAX fail message same as above
+      windowContent = "Cannot retrieve information about this venue.";
+    });
 
     // Open the infowindow at the marker
     infowindow.open(map, marker);
@@ -282,6 +321,10 @@ function populateInfoWindow(marker, infowindow) {
       activeMarker = null;
     });
   }
+}
+
+function setWindowContent(infowindow, windowContent) {
+	infowindow.setContent('<div>' + windowContent + '<div>');
 }
 
 /* NOTE: ONLY TURNS ON CURRENT MARKER, TURN OFF IS HANDLED BY CLOSECLICK OF INFOWINDOW */

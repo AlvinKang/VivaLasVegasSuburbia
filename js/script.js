@@ -5,6 +5,11 @@ var infowindow;
 var markersCategorized = {};
 var allMarkers = [];
 
+// Foursquare API app credentials
+const CLIENT_ID = "RXL2ZGNDMGNV4RANFA5USPSLC040X0ZHDL2YZXKFFEHCKCGT";
+const CLIENT_SECRET = "KJWNND1CVUF0GFDTANR1KSLEQRRFLH034GTRJSM1J1PXT5R3";
+const API_VERSION = "20180101";
+
 // Hard-coded locations for now, but dynamically present them through Google places API later
 // Categories: restaurants, parks, movie theaters, libraries
 var places = [
@@ -270,10 +275,6 @@ function populateInfoWindow(marker, infowindow) {
 
     var windowContent = "<h6>" + marker.title + "</h6>";
 
-    // Foursquare API AJAX
-    const CLIENT_ID = "RXL2ZGNDMGNV4RANFA5USPSLC040X0ZHDL2YZXKFFEHCKCGT";
-    const CLIENT_SECRET = "KJWNND1CVUF0GFDTANR1KSLEQRRFLH034GTRJSM1J1PXT5R3";
-    const API_VERSION = "20180101";
     // 1. Perform search for that venue using marker's title and location
     var searchUrl = "https://api.foursquare.com/v2/venues/search";
     var latlng = '' + marker.getPosition().lat() + ',' + marker.getPosition().lng();
@@ -298,17 +299,33 @@ function populateInfoWindow(marker, infowindow) {
       });
       $.getJSON(detailsUrl, function(data) {
       	var venue = data["response"]["venue"];
-      	var venueAddress = "Address: <br>" + venue["location"]["formattedAddress"][0] + "<br>" + venue["location"]["formattedAddress"][1];
-      	windowContent += "<br>" + venueAddress;
+
+      	// Obtain photo URL and create image element
+      	var photoURL = '';
+
+      	if (venue["photos"]["count"] > 0) {
+      		var firstPic = venue["photos"]["groups"][0]["items"][0];
+      		var prefix = firstPic["prefix"];
+      		var suffix = firstPic["suffix"];
+      		photoURL += prefix + "100x100" + suffix;
+      	}
+      	if (photoURL.length !== 0) {
+      		var venueImage = `<img src="${photoURL}">`;
+      		windowContent += venueImage + "<br><br>";
+      	}
+      	var venueAddress = venue["location"]["formattedAddress"][0] + "<br>" + venue["location"]["formattedAddress"][1];
+      	windowContent += venueAddress;
       	setWindowContent(infowindow, windowContent);
       }).fail(function() {
       	// If the AJAX request fails, change window information
       	windowContent = "Cannot retrieve information about this venue.";
+      	setWindowContent(infowindow, windowContent);
       });
 
     }).fail(function() {
       // AJAX fail message same as above
       windowContent = "Cannot retrieve information about this venue.";
+      setWindowContent(infowindow, windowContent);
     });
 
     // Open the infowindow at the marker

@@ -300,7 +300,7 @@ function populateInfoWindow(marker, infowindow) {
       $.getJSON(detailsUrl, function(data) {
       	var venue = data["response"]["venue"];
 
-      	// Obtain photo URL and create image element
+      	// Venue photo
       	var photoURL = '';
 
       	if (venue["photos"]["count"] > 0) {
@@ -313,8 +313,19 @@ function populateInfoWindow(marker, infowindow) {
       		var venueImage = `<img src="${photoURL}">`;
       		windowContent += venueImage + "<br><br>";
       	}
+
+      	// Venue rating
+      	if (venue["rating"]) {
+      		var rating = venue["rating"];
+      		var ratingColor = venue["ratingColor"];
+      		windowContent += `<b>Foursquare Rating: <span style="color:#${ratingColor}; font-size: 1.5em">${rating}</span> / 10</b><br><br>`;
+      	}
+
+      	// Venue address
       	var venueAddress = venue["location"]["formattedAddress"][0] + "<br>" + venue["location"]["formattedAddress"][1];
       	windowContent += venueAddress;
+
+      	// Attach content to infowindow
       	setWindowContent(infowindow, windowContent);
       }).fail(function() {
       	// If the AJAX request fails, change window information

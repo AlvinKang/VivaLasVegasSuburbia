@@ -230,7 +230,9 @@ function initMap() {
     mapTypeControl: false
   });
 
-  var largeInfowindow = new google.maps.InfoWindow();
+  var largeInfowindow = new google.maps.InfoWindow({
+    maxWidth: 200
+  });
   infowindow = largeInfowindow;
   var bounds = new google.maps.LatLngBounds();
 
@@ -271,7 +273,15 @@ function initMap() {
 function populateInfoWindow(marker, infowindow) {
   // As long as there's no infowindow already there, populate it
   if (infowindow.marker != marker) {
+    infowindow.setContent('');
     infowindow.marker = marker;
+
+    // When infowindow is closed, clear marker property, stop bouncing animation
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
+      marker.setAnimation(null);
+      activeMarker = null;
+    });
 
     // HTML that will populate the infowindow
     var windowContent = '';
@@ -346,13 +356,6 @@ function populateInfoWindow(marker, infowindow) {
 
     // Open the infowindow at the marker
     infowindow.open(map, marker);
-
-    // When infowindow is closed, clear marker property, stop bouncing animation
-    infowindow.addListener('closeclick', function() {
-      infowindow.marker = null;
-      marker.setAnimation(null);
-      activeMarker = null;
-    });
   }
 }
 

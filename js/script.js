@@ -273,9 +273,10 @@ function populateInfoWindow(marker, infowindow) {
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
 
-    var windowContent = "<h6>" + marker.title + "</h6>";
+    // HTML that will populate the infowindow
+    var windowContent = '';
 
-    // 1. Perform search for that venue using marker's title and location
+    // Perform search for that venue using marker's title and location
     var searchUrl = "https://api.foursquare.com/v2/venues/search";
     var latlng = '' + marker.getPosition().lat() + ',' + marker.getPosition().lng();
     searchUrl += '?' + $.param({
@@ -288,7 +289,7 @@ function populateInfoWindow(marker, infowindow) {
     });
 
     $.getJSON(searchUrl, function(result) {
-    	// 2. Retrieve place ID and perform another venue details AJAX request
+    	// Retrieve place ID and perform another venue details AJAX request
       var venue = result["response"]["venues"][0];
       var venueID = venue["id"];
       var detailsUrl = "https://api.foursquare.com/v2/venues/";
@@ -299,6 +300,10 @@ function populateInfoWindow(marker, infowindow) {
       });
       $.getJSON(detailsUrl, function(data) {
       	var venue = data["response"]["venue"];
+
+      	// Venue Foursquare page
+      	var venueFoursquarePageURL = venue["canonicalUrl"];
+      	windowContent += `<h6><a href="${venueFoursquarePageURL}" target="_blank">${marker.title}</a></h6>`;
 
       	// Venue photo
       	var photoURL = '';

@@ -8,3 +8,8 @@ html, body, #main { height: 100%; margin: 0; padding: 0; }
 .text-offwhite {
 	color: #EFEDEB;
 }
+
+#sidebar {
+	max-height: 100vh;
+	overflow: auto;
+}

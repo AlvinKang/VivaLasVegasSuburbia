@@ -13,3 +13,13 @@ html, body, #main { height: 100%; margin: 0; padding: 0; }
 	max-height: 100vh;
 	overflow: auto;
 }
+
+.list-group-item {
+	width: 80%;
+	margin: 0 auto;
+	background-color: #a8b1c1;
+}
+
+li a:hover {
+	color: #EFEDEB;
+}

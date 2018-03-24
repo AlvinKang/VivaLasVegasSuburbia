@@ -24,23 +24,18 @@
 					</div>
 				</div>
 				<!-- Filter dropdown row -->
-				<div class="row border-bottom">
+				<div class="row">
 					<div class="col">
-						<h1 class="text-center">Drop down area</h1>
+						<h3 class="text-center">Select a Category</h3>
 						<form>
 							<div class="form-group px-5">
 								<select class="form-control" data-bind="options: locationsCategorized, value: currentLocations, optionsText: 'locationsType'">
 								</select>
 							</div>
 						</form>
-					</div>
-				</div>
-				<!-- List View of Parks, Movie Theaters, Restaurants, Golf Courses, Libraries row -->
-				<div class="row border-bottom">
-					<div class="col">
-						<h1 class="text-center">List area</h1>
-						<ul id="locations-list" class="list-group pb-3" data-bind="foreach: currentLocations().markers">
-							<li><a class="list-group-item text-center" href="#" data-bind="text: title, click: $root.triggerLocationInfo"></a></li>
+						<!-- List View of Parks, Movie Theaters, Restaurants, Golf Courses, Libraries -->
+						<ul id="locations-list" class="list-group list-group-flush" data-bind="foreach: currentLocations().markers">
+							<li class="list-group-item bg-dark"><a href="#" data-bind="text: title, click: $root.triggerLocationInfo"></a></li>
 						</ul>
 					</div>
 				</div>

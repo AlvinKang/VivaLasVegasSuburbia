@@ -10,8 +10,7 @@ const CLIENT_ID = "RXL2ZGNDMGNV4RANFA5USPSLC040X0ZHDL2YZXKFFEHCKCGT";
 const CLIENT_SECRET = "KJWNND1CVUF0GFDTANR1KSLEQRRFLH034GTRJSM1J1PXT5R3";
 const API_VERSION = "20180101";
 
-// Hard-coded locations for now, but dynamically present them through Google places API later
-// Categories: restaurants, parks, movie theaters, libraries
+// Define and sort places
 var places = [
 	{ category: "Restaurants", title: "BRIO Tuscan Grille", location: { lat: 36.1670208, lng: -115.2877114 } },
 	{ category: "Restaurants", title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } },
@@ -36,6 +35,20 @@ var places = [
 	{ category: "Libraries", title: "Summerlin Library", location: { lat: 36.191391, lng: -115.301739 } }
 ];
 
+// Comparison function to properly sort places by title
+function comparePlaces(a, b) {
+  if (a.title < b.title) {
+    return -1;
+  }
+  if (a.title > b.title) {
+    return 1;
+  }
+  return 0;
+}
+
+places.sort(comparePlaces);
+
+// Google Maps API functions
 function initMap() {
   // Map styling
   var styles = [
@@ -359,6 +372,7 @@ function populateInfoWindow(marker, infowindow) {
   }
 }
 
+// Helper function to set given content to infowindow
 function setWindowContent(infowindow, windowContent) {
 	infowindow.setContent('<div>' + windowContent + '<div>');
 }

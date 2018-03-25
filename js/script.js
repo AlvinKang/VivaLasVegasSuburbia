@@ -240,7 +240,8 @@ function initMap() {
     center: mapCenter,
     styles: styles,
     scrollwheel: false,
-    mapTypeControl: false
+    mapTypeControl: false,
+    gestureHandling: 'greedy'
   });
 
   var largeInfowindow = new google.maps.InfoWindow({

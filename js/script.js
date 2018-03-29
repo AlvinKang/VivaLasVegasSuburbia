@@ -336,10 +336,10 @@ function populateInfoWindow(marker, infowindow) {
       		var firstPic = venue["photos"]["groups"][0]["items"][0];
       		var prefix = firstPic["prefix"];
       		var suffix = firstPic["suffix"];
-      		photoURL += prefix + "100x100" + suffix;
+      		photoURL += prefix + "300x300" + suffix;
       	}
       	if (photoURL.length !== 0) {
-      		var venueImage = `<img src="${photoURL}">`;
+      		var venueImage = `<img src="${photoURL}" height="150" width="150" style="border-radius: 8px">`;
       		windowContent += venueImage + "<br><br>";
       	}
 

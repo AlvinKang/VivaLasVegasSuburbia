@@ -245,7 +245,7 @@ function initMap() {
   });
 
   var largeInfowindow = new google.maps.InfoWindow({
-    maxWidth: 200
+    maxWidth: 150
   });
   infowindow = largeInfowindow;
   var bounds = new google.maps.LatLngBounds();
@@ -273,6 +273,7 @@ function initMap() {
   	marker.addListener('click', function() {
   		populateInfoWindow(this, largeInfowindow);
   		animateMarker(this);
+      map.panTo(marker.position);
   	});
 
   	// Extend map boundariers to fit marker
@@ -336,10 +337,10 @@ function populateInfoWindow(marker, infowindow) {
       		var firstPic = venue["photos"]["groups"][0]["items"][0];
       		var prefix = firstPic["prefix"];
       		var suffix = firstPic["suffix"];
-      		photoURL += prefix + "300x300" + suffix;
+      		photoURL += prefix + "100x100" + suffix;
       	}
       	if (photoURL.length !== 0) {
-      		var venueImage = `<img src="${photoURL}" height="150" width="150" style="border-radius: 8px">`;
+      		var venueImage = `<img src="${photoURL}" style="border-radius: 8px">`;
       		windowContent += venueImage + "<br><br>";
       	}
 

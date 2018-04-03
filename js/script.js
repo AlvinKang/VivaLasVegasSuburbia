@@ -275,7 +275,7 @@ function initMap() {
       map.panTo(marker.position);
   	});
 
-  	// Extend map boundariers to fit marker
+  	// Extend map boundaries to fit marker
   	bounds.extend(marker.position);
   }
 

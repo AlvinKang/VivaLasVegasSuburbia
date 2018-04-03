@@ -417,6 +417,11 @@ function showCategoryMarkers(category) {
 	}
 }
 
+// Call when there is a problem with Google Maps API
+function gm_authFailure() {
+  alert("Google Maps cannot be loaded.");
+};
+
 
 // ViewModel is also referred to as $root
 var ViewModel = function() {

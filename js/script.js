@@ -16,7 +16,6 @@ var places = [
 	{ category: "Restaurants", title: "Mint Indian Bistro", location: { lat: 36.11271519999999, lng: -115.2781838 } },
 	{ category: "Restaurants", title: "Market Grille Cafe", location: { lat: 36.195266, lng: -115.2481396 } },
 	{ category: "Restaurants", title: "Lee's Korean BBQ Woonamjung", location: { lat: 36.1269027, lng: -115.2411278 } },
-	{ category: "Restaurants", title: "Crave American Kitchen & Sushi Bar", location: { lat: 36.151, lng: -115.332771 } },
 
 	{ category: "Parks", title: "Mesa Park", location: { lat: 36.0898885, lng: -115.327354 } },
 	{ category: "Parks", title: "Desert Breeze Park", location: { lat: 36.1247021, lng: -115.2743979 } },
@@ -240,11 +239,12 @@ function initMap() {
     center: mapCenter,
     styles: styles,
     scrollwheel: false,
-    mapTypeControl: false
+    mapTypeControl: false,
+    gestureHandling: 'greedy'
   });
 
   var largeInfowindow = new google.maps.InfoWindow({
-    maxWidth: 200
+    maxWidth: 150
   });
   infowindow = largeInfowindow;
   var bounds = new google.maps.LatLngBounds();
@@ -272,6 +272,7 @@ function initMap() {
   	marker.addListener('click', function() {
   		populateInfoWindow(this, largeInfowindow);
   		animateMarker(this);
+      map.panTo(marker.position);
   	});
 
   	// Extend map boundariers to fit marker
@@ -338,7 +339,7 @@ function populateInfoWindow(marker, infowindow) {
       		photoURL += prefix + "100x100" + suffix;
       	}
       	if (photoURL.length !== 0) {
-      		var venueImage = `<img src="${photoURL}">`;
+      		var venueImage = `<img src="${photoURL}" style="border-radius: 8px">`;
       		windowContent += venueImage + "<br><br>";
       	}
 
@@ -346,11 +347,11 @@ function populateInfoWindow(marker, infowindow) {
       	if (venue["rating"]) {
       		var rating = venue["rating"];
       		var ratingColor = venue["ratingColor"];
-      		windowContent += `<b>Foursquare Rating: <span style="color:#${ratingColor}; font-size: 1.5em">${rating}</span> / 10</b><br><br>`;
+      		windowContent += `<b>Foursquare Rating: <span style="color:#${ratingColor}; font-size: 1.5em">${rating}</span></b><br><br>`;
       	}
 
       	// Venue address
-      	var venueAddress = venue["location"]["formattedAddress"][0] + "<br>" + venue["location"]["formattedAddress"][1];
+      	var venueAddress = venue["location"]["address"] + "<br>" + venue["location"]["formattedAddress"][1];
       	windowContent += venueAddress;
 
       	// Attach content to infowindow

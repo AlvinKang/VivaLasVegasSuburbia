@@ -5,80 +5,15 @@ body {
   padding: 0;
 }
 
-li a:hover {
-  color: #EFEDEB;
-  text-decoration: none;
-}
-
-.list-group .list-group-item {
-  border-bottom-width: 0;
-  border-color: #5d6575;
-  border-left-width: 0;
-  border-right-width: 0;
-  margin: 0 auto;
-  width: 80%;
-}
-
-.list-group .list-group-item:first-of-type {
-  border-top-width: 0;
-}
-
-.list-group .list-group-item:last-of-type {
-  border-bottom-width: 0;
-}
-
-#map {
-  height: 100vh;
-  width: 100%;
-}
-
-.sidebar {
-  max-height: 100vh;
-  overflow: auto;
-}
-
-
-.text-offwhite {
-  color: #EFEDEB;
-}
-
-#content {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-#content>.sidebar {
-  position: absolute;
-  z-index: 1;
-}
-
-.display-none {
-  display: none;
-}
-
-#btn-open {
-  position: absolute;
-  z-index: 9999;
-  left: 10px;
-  top: 10px;
-}
-
-#btn-close {
-  margin-right: 10px;
-  margin-top: 10px;
-}
-
-#map-container {
-  width: 100%;
-}
-
+/* ==========================================================================
+   Bootstrap custom class styling
+   ========================================================================== */
 .btn-primary {
-  color: #fff;
-  background-color: #007BFF;
-  border-color: #007BFF;
-  opacity: 0.5;
-}
+	background-color: #296CA8;
+	border-color: #296CA8;
+	color: #EDF4FB;
+	opacity: 0.8;
+ }
 
 .btn-primary:hover,
 .btn-primary:active:focus,
@@ -86,8 +21,127 @@ li a:hover {
 .btn-primary:active,
 .btn-primary.active,
 .open>.dropdown-toggle.btn-primary {
-  color: #fff;
-  background-color: #007BFF;
-  border-color: #007BFF;
-  opacity: 1.0;
+	background-color: #e0ef39;
+	border-color: #e0ef39;
+	color: #4992D3;
+	opacity: 0.8;
+}
+
+.list-group .list-group-item {
+	border-top-width: 1.5px;
+	border-bottom-width: 0;
+	border-color: #5d6575;
+	border-left-width: 0;
+	border-right-width: 0;
+	margin: 0 auto;
+	width: 80%;
+}
+
+.list-group .list-group-item:first-of-type {
+	border-top-width: 0;
+}
+
+.list-group .list-group-item:last-of-type {
+	border-bottom-width: 0;
+}
+
+/* ==========================================================================
+   General utility classes
+   ========================================================================== */
+
+.display-none {
+	display: none;
+}
+
+.max-height {
+	height: 100%;
+}
+
+.text-offwhite {
+  color: #EDF4FB;
+}
+
+.font-rubik {
+	font-family: 'Rubik';
+	font-weight: 500;
+}
+
+.font-poppins{
+	font-family: 'Poppins';
+	font-weight: 300;
+}
+
+.bg-ltblue {
+	background-color: #4992D3;
+}
+
+.bg-blue {
+	background-color: #296CA8;
+}
+
+.bg-dkblue {
+	background-color: #1A456B;
+}
+
+/* ==========================================================================
+   Wrapper, map, sidebar
+   ========================================================================== */
+
+#wrapper {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+#map-container {
+  width: 100%;
+}
+
+#map-container>#map {
+  height: 100vh;
+  width: 100%;
+}
+
+#sidebar {
+  max-height: 100vh;
+  max-width: 300px;
+  overflow: auto;
+  /* Alternative sidebar style */
+  /* position: absolute;
+ z-index: 1; */
+}
+
+#sidebar-header {
+  padding-left: 40px;
+  text-transform: uppercase;
+}
+
+#btn-open {
+  left: 10px;
+  position: absolute;
+  top: 10px;
+  z-index: 9999;
+}
+
+#btn-close {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+#locations-list > li a:hover {
+  color: #EFEDEB;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Breakpoint for smaller screens
+   ========================================================================== */
+@media (max-width: 700px) {
+  #sidebar {
+    flex: 0 0 250px;
+  }
+
+  #sidebar-header {
+    padding-left: 20px;
+  }
 }

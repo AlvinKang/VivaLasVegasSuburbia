@@ -11,35 +11,35 @@
 	<!-- open-iconic-bootstrap (icon set for bootstrap) -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" integrity="sha256-BJ/G+e+y7bQdrYkS2RBTyNfBHpA9IuGaPmf9htub5MQ=" crossorigin="anonymous" />
 	<!-- Fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One|Quicksand:500" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Rubik:500|Poppins:300,400" rel="stylesheet">
 </head>
 <body>
-	<div id="content">
+	<div id="wrapper">
 		<!-- Row contains 2 columns: 1. sidebar and 2. map -->
-		<div class="row text-offwhite no-gutters">
+		<div class="row no-gutters">
 			<!-- 1. Side Bar -->
-			<div class="sidebar col-3 bg-dark display-none" >
+			<div id="sidebar" class="col display-none text-offwhite bg-dkblue" >
 				<!-- Title row -->
-				<div class="row border-bottom">
+				<div class="row pb-3 bg-ltblue">
 					<div class="col">
 						<button type="button" id="btn-close" class="float-right btn btn-primary" title="Close Sidebar"><span class="oi oi-arrow-left"></span></button>
 						<br>
-						<h1 class="pl-5">Viva<br>Las Vegas<br>Suburbia</h1>
+						<h1 id="sidebar-header" class="font-rubik">Viva<br>Las Vegas<br>Suburbia</h1>
 					</div>
 				</div>
 				<!-- Filter dropdown row -->
-				<div class="row">
-					<div class="col">
-						<h3 class="text-center">Select a Category</h3>
+				<div id="" class="row bg-dkblue pt-3">
+					<div class="col max-height">
+						<h3 class="text-center pb-2">Select a Category</h3>
 						<form>
 							<div class="form-group px-5">
-								<select class="form-control" data-bind="options: locationsCategorized, value: currentLocations, optionsText: 'locationsType'">
+								<select id="drop-down" class="form-control" data-bind="options: locationsCategorized, value: currentLocations, optionsText: 'locationsType'">
 								</select>
 							</div>
 						</form>
 						<!-- List View of Parks, Movie Theaters, Restaurants, Golf Courses, Libraries -->
 						<ul id="locations-list" class="list-group list-group-flush" data-bind="foreach: currentLocations().markers">
-							<li class="list-group-item bg-dark"><a href="#" data-bind="text: title, click: $root.triggerLocationInfo"></a></li>
+							<li class="list-group-item bg-dkblue font-poppins"><a href="#" data-bind="text: title, click: $root.triggerLocationInfo"></a></li>
 						</ul>
 					</div>
 				</div>

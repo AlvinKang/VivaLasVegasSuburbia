@@ -118,7 +118,7 @@ places.sort(comparePlaces);
 // Google Maps API functions
 function initMap() {
   // Map styling
-  let styles = [
+  var styles = [
     {
       elementType: "geometry",
       stylers: [
@@ -389,7 +389,7 @@ function initMap() {
     markersCategorized[place.category].push(marker);
 
     // Add click events to marker
-    marker.addListener("click", () => {
+    marker.addListener("click", function() {
       populateInfoWindow(this, largeInfowindow);
       animateMarker(this);
       map.panTo(marker.position);
@@ -406,12 +406,12 @@ function initMap() {
 // Helper function to fill in infowindow for given marker
 function populateInfoWindow(marker, infowindow) {
   // As long as there's no infowindow already there, populate it
-  if (infowindow.marker !== marker) {
+  if (infowindow.marker != marker) {
     infowindow.setContent("");
     infowindow.marker = marker;
 
     // When infowindow is closed, clear marker property, stop bouncing animation
-    infowindow.addListener("closeclick", () => {
+    infowindow.addListener("closeclick", function() {
       infowindow.marker = null;
       marker.setAnimation(null);
       activeMarker = null;
@@ -435,7 +435,7 @@ function populateInfoWindow(marker, infowindow) {
         radius: "5000"
       });
 
-    $.getJSON(searchUrl, result => {
+    $.getJSON(searchUrl, function(result) {
       // Retrieve place ID and perform another venue details AJAX request
       let venue = result["response"]["venues"][0];
       let venueID = venue["id"];
@@ -448,7 +448,7 @@ function populateInfoWindow(marker, infowindow) {
           client_secret: CLIENT_SECRET,
           v: API_VERSION
         });
-      $.getJSON(detailsUrl, data => {
+      $.getJSON(detailsUrl, function(data) {
         let venue = data["response"]["venue"];
 
         // Venue Foursquare page
@@ -487,12 +487,12 @@ function populateInfoWindow(marker, infowindow) {
 
         // Attach content to infowindow
         setWindowContent(infowindow, windowContent);
-      }).fail(() => {
+      }).fail(function() {
         // If the AJAX request fails, change window information
         windowContent = "Cannot retrieve information about this venue.";
         setWindowContent(infowindow, windowContent);
       });
-    }).fail(() => {
+    }).fail(function() {
       // AJAX fail message same as above
       windowContent = "Cannot retrieve information about this venue.";
       setWindowContent(infowindow, windowContent);
@@ -553,7 +553,7 @@ function gm_authFailure() {
 }
 
 // ViewModel is also referred to as $root
-let ViewModel = () => {
+let ViewModel = function() {
   initMap();
   let self = this;
 
@@ -578,7 +578,7 @@ let ViewModel = () => {
   self.currentLocations = ko.observable();
 
   // When user interacts with dropdown, display the markers for the corresponding location type
-  self.currentLocations.subscribe(currentLocations => {
+  self.currentLocations.subscribe(function(currentLocations) {
     if (currentLocations.locationsType === "All Locations") {
       showAllMarkers();
     } else {
@@ -588,9 +588,9 @@ let ViewModel = () => {
   });
 
   // When a list item is clicked, animate the marker and show clicked location's infowindow
-  self.triggerLocationInfo = place => {
+  self.triggerLocationInfo = function(place) {
     // Locate marker by title of location
-    let matchedMarker = self.currentLocations().markers.find(marker => {
+    let matchedMarker = self.currentLocations().markers.find(function(marker) {
       return marker.title === place.title;
     });
     animateMarker(matchedMarker);
